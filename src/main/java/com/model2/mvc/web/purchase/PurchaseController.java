@@ -154,6 +154,7 @@ public class PurchaseController {
 
 	@RequestMapping("/listPurchase.do")
 	public ModelAndView listPurchase(@ModelAttribute("Search") Search search,
+									 HttpSession session,
 									 Model model) throws Exception{
 
 		System.out.println("/listPurchase.do");
@@ -163,13 +164,14 @@ public class PurchaseController {
 		}
 
 		search.setPageSize(pageSize);
+		User buyerId = (User) session.getAttribute("user");
 
-		Map<String, Object> map = purchaseService.getPurchaseList(search);
+		Map<String, Object> map = purchaseService.getPurchaseList(search, buyerId.getUserId());
 
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize );
 		System.out.println(resultPage);
 
-		model.addAttribute("list", map.get("purchaseList"));//이거 수정했음
+		model.addAttribute("list", map.get("list"));//이거 수정했음
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 

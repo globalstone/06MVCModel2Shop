@@ -1,6 +1,7 @@
 package com.model2.mvc.service.purchase.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,9 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public List<Purchase> getPurchaseList(Search search) throws Exception {
+	public List<Purchase> getPurchaseList(Map<String,Object> map ) throws Exception {
 		// TODO Auto-generated method stub
-		return sqlSession.selectList("PurchaseMapper.getPurchaseList",search);
+		return sqlSession.selectList("PurchaseMapper.getPurchaseList",map);
 	}
 
 	@Override

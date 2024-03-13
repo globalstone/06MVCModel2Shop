@@ -38,13 +38,18 @@ public class PurchaseServiceimpl implements PurchaseService {
 	}
 
 	@Override
-	public Map<String, Object> getPurchaseList(Search search) throws Exception {
-		List<Purchase> list = purchaseDao.getPurchaseList(search);
-		int totalCount = purchaseDao.getTotalCount(search);
+	public Map<String, Object> getPurchaseList(Search search,String buyerId) throws Exception {
 		
-		Map<String, Object>map = new HashMap<String, Object>();
-		map.put("purchaseList", list);
-		map.put("totalCount",new Integer(totalCount));
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		map.put("search", search);
+		map.put("buyerId", buyerId);
+
+		List<Purchase> list =  purchaseDao.getPurchaseList(map);
+		int totalCount = purchaseDao.getTotalCount(search);
+
+		map.put("list", list);
+		map.put("totalCount", new Integer(totalCount));
 		
 		return map;
 	}

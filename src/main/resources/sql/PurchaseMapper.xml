@@ -68,17 +68,31 @@
 </update>
 
 
-    <!--    parameterType : search -> user 변경 -->
-    <select id="getPurchaseList" parameterType="search" resultMap="purchaseSelectMap">
+<sql id="select-purchaseList">
+    SELECT
+        t.tran_no, t.prod_no, t.buyer_id, t.payment_option, t.receiver_name,
+        t.receiver_phone, t.DEMAILADDR, t.dlvy_request, t.tran_status_code,
+        t.order_data, t.dlvy_date
+    FROM transaction t
+             LEFT JOIN product p ON t.prod_no = p.prod_no
+    WHERE t.buyer_id = #{buyerId}
+</sql>
+
+
+    <select id="getPurchaseList" parameterType="map" resultMap="purchaseSelectMap">
         SELECT *
-        FROM (SELECT inner_table.* ,  ROWNUM AS row_seq
-        FROM (<include refid="select-list"/>) inner_table
-        WHERE ROWNUM &lt;= #{endRowNum})
-        WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
+        FROM ( SELECT inner_table.* , ROWNUM AS row_seq
+        FROM ( <include refid="select-purchaseList" />
+        ORDER BY t.tran_no ) inner_table
+        WHERE ROWNUM &lt;= #{search.endRowNum} )
+        WHERE row_seq BETWEEN #{search.startRowNum} AND
+        #{search.endRowNum}
     </select>
 
     <select id="getTotalCount" parameterType="search" resultType="int">
         SELECT COUNT(*)
-        FROM (<include refid="select-list"/>)countTable
+        FROM( SELECT tran_no
+              FROM transaction
+            ) countTable
     </select>
 </mapper>
