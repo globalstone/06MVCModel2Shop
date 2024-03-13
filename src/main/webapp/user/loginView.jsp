@@ -16,7 +16,7 @@
 			document.loginForm.userId.focus();
 			return;
 		}
-		
+
 		if(pw == null || pw.length <1) {
 			alert('패스워드를 입력하지 않으셨습니다.');
 			document.loginForm.password.focus();
@@ -24,7 +24,14 @@
 		}
 	    document.loginForm.submit();
 	}
-	
+
+    function Enter_Check(event){        // 엔터키 코드 13
+        if(event.keyCode == 13){
+            fncLogin();
+            return;
+        }
+    }
+
 	//Call Back Method 이용 onload 시 Event 처리
 	window.onload = function(){
 		document.getElementById("userId").focus();
@@ -36,7 +43,7 @@
 
 <body bgcolor="#ffffff" text="#000000" >
 
-<form name="loginForm"  method="post" action="/login.do" target="_parent">
+<form name="loginForm"  method="post" action="/login.do" target="_parent" onkeydown="JavaScript:Enter_Check(event);">
 
 <div align="center">
 
